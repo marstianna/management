@@ -11,6 +11,8 @@ public class Operation {
 
     private String qualifier;
 
+    private String name;
+
     private String displayName;
 
     private String path;
@@ -69,5 +71,13 @@ public class Operation {
 
     public void setQualifier(String qualifier) {
         this.qualifier = qualifier;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

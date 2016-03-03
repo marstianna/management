@@ -1,5 +1,6 @@
 package com.dmall.management.core.invoker;
 
+import com.dmall.management.core.Invoker;
 import com.dmall.management.core.bean.Node;
 import com.dmall.management.core.bean.Operation;
 import com.dmall.management.core.bean.Parameter;
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * Created by zoupeng on 16/3/2.
  */
-public class HttpInvoker {
+public class HttpInvoker implements Invoker{
 
     public Object invoke(Operation operation){
         Node node = operation.getService().getNode();
