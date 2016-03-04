@@ -1,6 +1,6 @@
 package com.dmall.management.core.scanner;
 
-import com.dmall.management.client.AnnotationScanner;
+import com.dmall.management.core.AnnotationScanner;
 import com.dmall.management.core.annotation.ManagementParam;
 import com.dmall.management.core.bean.Parameter;
 
@@ -18,7 +18,7 @@ class ManagementParamScanner implements AnnotationScanner<Parameter> {
         scanner.param = _param;
         return scanner;
     }
-    @Override
+
     public Parameter scan() {
         Parameter tmpParam = new Parameter();
         tmpParam.setDesc(param.desc());

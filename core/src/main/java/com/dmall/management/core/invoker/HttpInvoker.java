@@ -6,7 +6,6 @@ import com.dmall.management.core.bean.Operation;
 import com.dmall.management.core.bean.Parameter;
 import com.dmall.management.core.helper.HttpSender;
 import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.List;
  */
 public class HttpInvoker implements Invoker{
 
-    public Object invoke(Operation operation){
+    public String invoke(Operation operation){
         Node node = operation.getService().getNode();
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -24,7 +23,7 @@ public class HttpInvoker implements Invoker{
             params.add(new NameValuePair(parameter.getName(),parameter.getValue()));
         }
 
-        Pair<Boolean,String> result = HttpSender.connect(node.getIp(),node.getPort(),node.getBasePath()+"/"+operation.getPath(),params);
+        String result = HttpSender.connect(node.getIp(),node.getPort(),node.getBasePath()+"/"+operation.getPath(),params);
         return result;
     }
 }

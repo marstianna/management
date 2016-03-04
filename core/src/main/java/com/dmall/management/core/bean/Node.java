@@ -12,6 +12,7 @@ public class Node {
     private String desc;
     private String name;
     private String displayName;
+    private String nodeQualifier;
     private String basePath;
 
     private List<Service> services = new ArrayList<Service>();
@@ -74,5 +75,13 @@ public class Node {
 
     public void add(Service service){
         this.services.add(service);
+    }
+
+    public String getNodeQualifier() {
+        return nodeQualifier;
+    }
+
+    public void setNodeQualifier(String nodeQualifier) {
+        this.nodeQualifier = nodeQualifier;
     }
 }

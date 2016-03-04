@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
  */
 @Component("springInvoker")
 public class SpringInvoker implements Invoker {
-    @Override
+
     public Object invoke(Operation operation) {
         Object result = null;
         try {
@@ -31,6 +31,7 @@ public class SpringInvoker implements Invoker {
                     Object obj = JSON.parseObject(parameter.getValue(), Class.forName(parameter.getType()));
                     params[i] = obj;
                     paramTypes[i] = Class.forName(parameter.getType());
+                    i++;
                 }
                 method = c.getMethod(operation.getName(), paramTypes);
                 result = method.invoke(instance,params);
@@ -39,8 +40,8 @@ public class SpringInvoker implements Invoker {
                 result = method.invoke(instance);
             }
         }catch (Exception e){
-
+            e.printStackTrace();
         }
-        return null;
+        return result;
     }
 }

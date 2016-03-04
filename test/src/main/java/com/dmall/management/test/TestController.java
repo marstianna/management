@@ -17,7 +17,7 @@ public class TestController {
     public static void main(String[] args) {
         ApplicationContext ac = new ClassPathXmlApplicationContext("spring.xml");
         NodeParser nodeParser = ac.getBean(NodeParser.class);
-        Node node = nodeParser.parse();
+        Node node = nodeParser.get();
         NodeServiceBuilder nodeServiceBuilder = new NodeServiceBuilder();
         nodeServiceBuilder.build(node);
         for(Service service : node.getServices()){

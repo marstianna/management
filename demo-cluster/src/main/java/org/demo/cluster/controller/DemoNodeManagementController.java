@@ -29,7 +29,7 @@ public class DemoNodeManagementController {
     @RequestMapping("register")
     @ResponseBody
     public Node register(){
-        return nodeParser.parse();
+        return nodeParser.get();
     }
 
     @RequestMapping("exec")

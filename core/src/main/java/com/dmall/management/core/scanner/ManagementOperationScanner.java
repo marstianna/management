@@ -1,6 +1,6 @@
 package com.dmall.management.core.scanner;
 
-import com.dmall.management.client.AnnotationScanner;
+import com.dmall.management.core.AnnotationScanner;
 import com.dmall.management.core.annotation.ManagementOperation;
 import com.dmall.management.core.annotation.ManagementParam;
 import com.dmall.management.core.bean.Operation;
@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
 /**
  * Created by zoupeng on 16/3/2.
  */
-class ManagementOperationScanner implements AnnotationScanner<Operation>{
+class ManagementOperationScanner implements AnnotationScanner<Operation> {
     private Method method;
 
     private ManagementOperationScanner(){}
@@ -23,7 +23,6 @@ class ManagementOperationScanner implements AnnotationScanner<Operation>{
         return operationScanner;
     }
 
-    @Override
     public Operation scan() {
         Operation operation = new Operation();
         Annotation annotationOfOperation = method.getAnnotation(ManagementOperation.class);
