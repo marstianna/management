@@ -24,6 +24,7 @@ class ManagementParamScanner implements AnnotationScanner<Parameter> {
         tmpParam.setDesc(param.desc());
         tmpParam.setName(param.name());
         tmpParam.setType(param.type());
+        tmpParam.setOrder(param.order());
         return tmpParam;
     }
 

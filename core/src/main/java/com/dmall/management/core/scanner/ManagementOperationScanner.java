@@ -31,7 +31,6 @@ class ManagementOperationScanner implements AnnotationScanner<Operation> {
         }
         ManagementOperation managementOperation = (ManagementOperation)annotationOfOperation;
         operation.setDisplayName(managementOperation.displayName());
-        operation.setPath(managementOperation.path());
         operation.setQualifier(managementOperation.qualifier());
         operation.setName(method.getName());
         for(ManagementParam param : managementOperation.params()){

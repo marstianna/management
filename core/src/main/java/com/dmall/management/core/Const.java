@@ -5,4 +5,6 @@ package com.dmall.management.core;
  */
 public class Const {
     public static final String MASTER_HOST_KEY = "master_key";
+    public static final String REGISTER_PATH = "register_path";
+
 }

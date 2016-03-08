@@ -10,9 +10,9 @@ import com.dmall.management.core.annotation.ManagementService;
 @ManagementService(desc = "test")
 public class TestManagementService {
 
-    @ManagementOperation(displayName = "testMethod1",path = "testMethod1",qualifier = "testMethod1"
+    @ManagementOperation(displayName = "testMethod1",qualifier = "testMethod1"
     ,params = {
-            @ManagementParam(desc = "testParam1",name = "param1",type = "java.lang.String")
+            @ManagementParam(desc = "testParam1",name = "param1",type = "java.lang.String",order = 0)
     })
     public void testMethod1(String param1){
         System.out.println("----------------------------------------");

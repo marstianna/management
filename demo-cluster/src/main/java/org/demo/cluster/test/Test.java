@@ -11,6 +11,7 @@ import org.demo.cluster.controller.DemoNodeManagementController;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -22,7 +23,7 @@ public class Test {
         NodeParser parser = ac.getBean(NodeParser.class);
         NodeServiceBuilder builder = new NodeServiceBuilder();
         Node node = parser.get();
-        builder.build(node);
+        builder.buildNode(node);
 
         NodeCache cache = new NodeCache();
         cache.register(node);
@@ -30,17 +31,14 @@ public class Test {
         DemoNodeManagementController controller = ac.getBean(DemoNodeManagementController.class);
 
         Map<String,Operation> operations = cache.getOperationByQualified("demo_devide");
+        Map<String,Object> params = new HashMap<String, Object>();
         for(String nodeQualifier : operations.keySet()){
             Operation operation = operations.get(nodeQualifier);
+            int i = 5;
             for(Parameter parameter : operation.getParams()){
-                if(parameter.getName().equals("x")){
-                    parameter.setValue("5");
-                }
-                if(parameter.getName().equals("y")){
-                    parameter.setValue("3");
-                }
+                params.put(parameter.getName(),i++);
             }
-            Object result = controller.exec(operation);
+            Object result = controller.exec(nodeQualifier,operation.getQualifier(),params);
             System.out.println(JSON.toJSONString(result));
         }
 

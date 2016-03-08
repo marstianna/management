@@ -15,8 +15,6 @@ public class Operation {
 
     private String displayName;
 
-    private String path;
-
     private Result result;
 
     private List<Parameter> params = new ArrayList<Parameter>();
@@ -35,14 +33,6 @@ public class Operation {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 
     public Result getResult() {

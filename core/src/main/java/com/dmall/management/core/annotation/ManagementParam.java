@@ -28,4 +28,10 @@ public @interface ManagementParam {
      * @return
      */
     String type();
+
+    /**
+     * 参数顺序位置表示
+     * @return
+     */
+    int order();
 }

@@ -1,6 +1,8 @@
 package com.dmall.management.core.parser;
 
+import com.dmall.management.core.NodeServiceBuilder;
 import com.dmall.management.core.bean.Node;
+import com.dmall.management.core.bean.Operation;
 import com.dmall.management.core.bean.Service;
 import com.dmall.management.core.configuration.ManagementConfig;
 import com.dmall.management.core.scanner.ManagementServiceScanner;
@@ -22,7 +24,7 @@ public class NodeParser {
 
         updateImmediately();
 
-        return nodeRefer.get();
+        return  nodeRefer.get();
     }
 
     public void updateImmediately(){
@@ -40,8 +42,27 @@ public class NodeParser {
                 }
             }
 
+            node.setNodeQualifier(NodeServiceBuilder.buildNodeQualifier(node));
+
             nodeRefer.set(node);
         }
+    }
+
+    public Operation getOperation(String operationQualifier){
+        Node node = get();
+
+        Operation target = null;
+        for(Service service : node.getServices()){
+            for(Operation operation : service.getOperations()){
+                if(operation.getQualifier().equals(operationQualifier)){
+                    operation.setService(service);
+                    service.setNode(node);
+                    target = operation;
+                }
+            }
+        }
+
+        return target;
     }
 
     public ManagementConfig getManagementConfig() {

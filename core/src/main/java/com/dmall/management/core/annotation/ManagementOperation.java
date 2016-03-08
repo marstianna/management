@@ -20,12 +20,6 @@ public @interface ManagementOperation {
     String displayName();
 
     /**
-     * 请求的相对路径,绝对路径是Node节点的basePath/path
-     * @return
-     */
-    String path();
-
-    /**
      * 方法的唯一标识
      * @return
      */

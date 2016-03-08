@@ -18,16 +18,14 @@ public class HttpSender {
     protected static final Logger LOGGER = LoggerFactory.getLogger(HttpSender.class);
 
 
-    public static String connect(String ip,Integer servingPort,String servingPath,List<NameValuePair> params){
+    public static String connect(String ip,Integer servingPort,String servingPath,NameValuePair[] params){
 
         String address = ip +":" + servingPort;
 
         HttpClient client = new HttpClient();
 
         PostMethod method = new PostMethod();
-        method.addParameter("ip",ip);
-        method.addParameter("servingPort",String.valueOf(servingPort));
-        method.addParameters(params.toArray(new NameValuePair[params.size()]));
+        method.addParameters(params);
 
         String requestUrl = "http://"+address+"/"+servingPath;
         try{
@@ -35,14 +33,7 @@ public class HttpSender {
             URI uri = new URI(requestUrl,false);
             method.setURI(uri);
             client.executeMethod(method);
-            String result = method.getResponseBodyAsString();
-
-//            JSONObject result = JSON.parseObject(registerResult);
-//
-//            Boolean success = result.getBoolean("success");
-//            String data = result.getString("data");
-
-            return result;
+            return method.getResponseBodyAsString();
         }catch (IOException e){
             LOGGER.error("Connect ("+address+") Failed : " + e.getMessage(), e);
             throw new RuntimeException("连接服务器失败",e);
@@ -56,7 +47,7 @@ public class HttpSender {
 
         Preconditions.checkArgument(address.length == 2);
 
-        return connect(address[0],Integer.parseInt(address[1]),servingPath,params);
+        return connect(address[0],Integer.parseInt(address[1]),servingPath,params.toArray(new NameValuePair[params.size()]));
     }
 
 }

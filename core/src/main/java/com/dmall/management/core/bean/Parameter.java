@@ -14,6 +14,8 @@ public class Parameter {
 
     private String value;
 
+    private Integer order;
+
     public String getDesc() {
         return desc;
     }
@@ -52,5 +54,13 @@ public class Parameter {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public Integer getOrder() {
+        return order;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
     }
 }
