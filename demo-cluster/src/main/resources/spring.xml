@@ -9,22 +9,15 @@
 
     <bean class="org.demo.cluster.util.ApplicationContextUtil" scope="singleton" />
 
-    <bean id="managementConfig" class="com.dmall.management.core.configuration.ManagementConfig">
+    <bean id="managementConfig" class="com.dmall.managed.core.client.ManagementConfig">
         <property name="name" value="node" />
         <property name="displayName" value="Demo cluster" />
         <property name="basePath" value="/node/management" />
         <property name="desc" value="Demo Cluster for all" />
         <property name="achievePort" ref="testAchievePort" />
-        <property name="classNames">
-            <value>org.demo.cluster.management.impl.DemoManagementServiceImpl</value>
-        </property>
     </bean>
 
     <bean id="testAchievePort" class="org.demo.cluster.DemoAchievePort" />
-
-    <bean id="nodeParser" class="com.dmall.management.core.parser.NodeParser">
-        <property name="managementConfig" ref="managementConfig" />
-    </bean>
 
     <context:component-scan base-package="org.demo.cluster"  >
         <context:include-filter type="annotation"  expression="org.springframework.stereotype.Controller" />

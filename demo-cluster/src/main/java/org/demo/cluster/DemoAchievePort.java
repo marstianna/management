@@ -1,6 +1,7 @@
 package org.demo.cluster;
 
-import com.dmall.management.core.IAchievePort;
+
+import com.dmall.managed.core.IAchievePort;
 
 /**
  * Created by zoupeng on 16/3/3.

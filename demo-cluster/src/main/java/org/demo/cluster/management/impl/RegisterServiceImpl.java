@@ -1,11 +1,6 @@
 package org.demo.cluster.management.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.dmall.management.core.helper.HttpSender;
-import com.dmall.management.core.parser.NodeParser;
-import org.apache.commons.httpclient.NameValuePair;
 import org.demo.cluster.management.RegisterService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,12 +8,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class RegisterServiceImpl implements RegisterService{
-    @Autowired
-    NodeParser nodeParser;
-
-//    @PostConstruct
+    @Override
     public void register() {
-        NameValuePair pair = new NameValuePair("node", JSON.toJSONString(nodeParser.get()));
-        HttpSender.connect("192.168.8.44",8081,"/node/management/register", new NameValuePair[]{pair});
+
     }
 }

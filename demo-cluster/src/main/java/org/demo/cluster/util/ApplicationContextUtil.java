@@ -20,7 +20,6 @@ public class ApplicationContextUtil implements ApplicationContextAware {
     /* (non-Javadoc)
      * @see org.springframework.context.ApplicationContextAware#setApplicationContext(org.springframework.context.ApplicationContext)
      */
-    @Override
     public void setApplicationContext(ApplicationContext ac) {
         context = ac;
     }

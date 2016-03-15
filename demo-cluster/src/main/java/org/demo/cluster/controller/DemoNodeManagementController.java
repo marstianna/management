@@ -1,8 +1,9 @@
 package org.demo.cluster.controller;
 
-import com.dmall.management.core.Invoker;
-import com.dmall.management.core.bean.Node;
-import com.dmall.management.core.parser.NodeParser;
+import com.alibaba.fastjson.JSONObject;
+import com.dmall.managed.core.client.AbstractManagedClientController;
+import com.dmall.managed.core.client.NodeClient;
+import com.dmall.managed.core.Invoker;
 import org.demo.cluster.management.DemoManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,24 +19,33 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/node/management/")
-public class DemoNodeManagementController {
+public class DemoNodeManagementController extends AbstractManagedClientController{
     @Autowired
     DemoManagementService demoManagementService;
-    @Autowired
-    NodeParser nodeParser;
     @Resource(name = "springInvoker")
     Invoker invoker;
 
-    @RequestMapping("register")
-    @ResponseBody
-    public Node register(){
-        return nodeParser.get();
-    }
-
     @RequestMapping("exec")
     @ResponseBody
-    public Object exec(String nodeQualifier, String operationQualifier, @ModelAttribute Map<String,Object> params){
-//        return invoker.invoke(operation);
-        return invoker.invoke(nodeQualifier,operationQualifier,params);
+    @Override
+    public Object exec(String operationQualifier, @ModelAttribute Map<String,Object> params){
+        return super.exec(operationQualifier, params);
+    }
+
+    @RequestMapping("register")
+    @ResponseBody
+    @Override
+    public String getNodeInfo() {
+        return JSONObject.toJSONString(demoManagementService.getNode());
+    }
+
+    @Override
+    public Invoker getInvoker() {
+        return invoker;
+    }
+
+    @Override
+    public NodeClient getNodeClient() {
+        return demoManagementService;
     }
 }
