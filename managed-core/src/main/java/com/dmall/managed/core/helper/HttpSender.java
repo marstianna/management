@@ -38,6 +38,7 @@ public class HttpSender {
 
         String requestUrl = "http://"+absolutePath;
 
+        LOGGER.info("请求连接地址为:"+requestUrl);
         try{
             URI uri = new URI(requestUrl,false);
             method.setURI(uri);
@@ -47,6 +48,7 @@ public class HttpSender {
             LOGGER.error("Connect ("+absolutePath+") Failed : " + e.getMessage(), e);
             throw new RuntimeException("连接服务器失败",e);
         }catch (Exception e){
+            LOGGER.error("Connect ("+absolutePath+") Failed : " + e.getMessage(), e);
             throw new RuntimeException("连接地址:"+requestUrl,e);
         }
     }

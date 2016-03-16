@@ -51,6 +51,7 @@ public class NodeClient implements ApplicationListener<ContextRefreshedEvent> {
     public void connect(String centralNode, String registerPath) {
         Preconditions.checkArgument(!StringUtils.isBlank(centralNode));
 
+        LOGGER.info("启动时自动注册方法调用开始,中央节点注册地址为"+centralNode+registerPath);
         Node node = collectNodeInfo();
         NameValuePair pair = new NameValuePair("nodeInfo", JSON.toJSONString(node));
         try {
@@ -61,7 +62,7 @@ public class NodeClient implements ApplicationListener<ContextRefreshedEvent> {
                 throw new RuntimeException("注册失败！"+ result.getString("message"));
             }
         }catch(Exception e){
-            e.printStackTrace();
+            LOGGER.error("自动注册到man节点失败,请手动重试",e);
         }
 
         fillRegisterInfo(centralNode, node);
