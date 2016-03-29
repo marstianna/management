@@ -1,5 +1,6 @@
 package com.dmall.managed.core.helper;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.URI;
@@ -39,6 +40,8 @@ public class HttpSender {
         String requestUrl = "http://"+absolutePath;
 
         LOGGER.info("请求连接地址为:"+requestUrl);
+        LOGGER.info("请求参数为:"+ JSON.toJSONString(params));
+
         try{
             URI uri = new URI(requestUrl,false);
             method.setURI(uri);

@@ -103,16 +103,13 @@ public class NodeClient implements ApplicationListener<ContextRefreshedEvent> {
     private List<Service> getAllManagedBeans() {
         List<Service> ret = new ArrayList<Service>();
         ApplicationContext context = this.ac;
-
-        do {
-            Map<String, Object> beanMap = context.getBeansWithAnnotation(ManagementService.class);
-            if (MapUtils.isNotEmpty(beanMap)) {
-                for(Object obj : beanMap.values()){
-                    Service service = NodeServiceBuilder.buidNodeService(obj.getClass());
-                    ret.add(service);
-                }
+        Map<String, Object> beanMap = context.getBeansWithAnnotation(ManagementService.class);
+        if (MapUtils.isNotEmpty(beanMap)) {
+            for(Object obj : beanMap.values()){
+                Service service = NodeServiceBuilder.buidNodeService(obj.getClass());
+                ret.add(service);
             }
-        } while ((context = context.getParent()) != null);
+        }
 
         return ret;
     }

@@ -21,9 +21,9 @@ public class SystemInfoProvider {
 
     private IAchievePort achievePort;
     /**
-     * 从本地JMX服务中获取server端口
+     * 从tomcat注册在本地的mbean服务中获取server端口
      *      通过Tomcat静态类ServerFactory可以更容易的获取到端口
-     *      但考虑到兼容性,选择使用JMX获取:更换容器时，只需要替换JMX的query字符串
+     *      但考虑到兼容性,更换容器时，只需要替换JMX的query字符串
      *      增加从数据库中获取端口配置的逻辑的备选逻辑
      * @return
      */

@@ -1,6 +1,8 @@
 package com.dmall.managed.core.client;
 
+import com.alibaba.fastjson.JSON;
 import com.dmall.managed.core.Invoker;
+import com.google.common.collect.ImmutableMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +20,9 @@ public abstract class AbstractManagedClientController {
         return getInvoker().invoke(getNodeClient().findOperation(operationQualifier),params);
     }
 
-    public abstract String getNodeInfo();
+    public Object getNodeInfo(){
+        return JSON.toJSONString(ImmutableMap.of("nodeInfo", getNodeClient().getNode()));
+    }
 
     public abstract Invoker getInvoker() ;
 

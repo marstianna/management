@@ -6,9 +6,12 @@ import com.dmall.managed.core.Invoker;
 import com.dmall.managed.core.bean.Node;
 import com.dmall.managed.core.bean.Operation;
 import com.dmall.managed.core.helper.HttpSender;
+import com.dmall.managed.core.server.service.BatchExecuteService;
 import com.dmall.managed.core.server.service.NodeService;
 import com.dmall.managed.core.server.service.RegisterStore;
+import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import org.apache.commons.httpclient.NameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 
 /**
  * Created by zoupeng on 16/3/10.
@@ -23,6 +28,7 @@ import java.util.Map;
 public class NodeServiceImpl implements NodeService {
     private RegisterStore registerStore;
     private Invoker invoker;
+    private BatchExecuteService batchExecuteService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NodeServiceImpl.class);
 
@@ -89,20 +95,37 @@ public class NodeServiceImpl implements NodeService {
     }
 
     @Override
-    public List<Object> batchExec(String operationQualifier, Map<String, Object> params) {
-        List<Object> results= new ArrayList<>();
+    public List<Object> batchExec(final String operationQualifier, final Map<String, Object> params) {
+        List<Future<Object>> results= new ArrayList<>();
 
         List<Operation> operations = registerStore.getOperations(operationQualifier);
-        for(Operation operation : operations){
-            try {
-                Object result = exec(operation, params);
-                results.add(result);
-            } catch (Exception e) {
-                LOGGER.error("执行operation:"+operationQualifier+",节点为:"+operation.getService().getNode().getNodeQualifier(),e);
-            }
+        for(final Operation operation : operations){
+            Future<Object> result = batchExecuteService.submit(new Callable<Object>() {
+                @Override
+                public Object call() throws Exception {
+                    Object result = null;
+                    try {
+                        result = exec(operation, params);
+                    } catch (Exception e) {
+                        LOGGER.error("执行operation:"+operationQualifier+",节点为:"+operation.getService().getNode().getNodeQualifier(),e);
+                    }
+                    return result;
+                }
+            });
+            results.add(result);
         }
 
-        return results;
+        return Lists.transform(results, new Function<Future<Object>, Object>() {
+            @Override
+            public Object apply(Future<Object> input) {
+                try {
+                    return input.get();
+                } catch (Exception e){
+                    LOGGER.error("执行失败,请立即检查");
+                }
+                return null;
+            }
+        });
     }
 
     public RegisterStore getRegisterStore() {
@@ -119,5 +142,13 @@ public class NodeServiceImpl implements NodeService {
 
     public void setInvoker(Invoker invoker) {
         this.invoker = invoker;
+    }
+
+    public BatchExecuteService getBatchExecuteService() {
+        return batchExecuteService;
+    }
+
+    public void setBatchExecuteService(BatchExecuteService batchExecuteService) {
+        this.batchExecuteService = batchExecuteService;
     }
 }

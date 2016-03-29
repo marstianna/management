@@ -29,10 +29,7 @@ public class HttpInvoker implements Invoker {
 
     private List<NameValuePair> makeParams(Operation operation , Map<String,Object> params){
         List<NameValuePair> paramList = new ArrayList<>();
-        for(String key : params.keySet()){
-            NameValuePair value = new NameValuePair(key, JSON.toJSONString(params.get(key)));
-            paramList.add(value);
-        }
+        paramList.add(new NameValuePair("params",JSON.toJSONString(params)));
         paramList.add(new NameValuePair("operationQualifier",operation.getQualifier()));
         return paramList;
     }
