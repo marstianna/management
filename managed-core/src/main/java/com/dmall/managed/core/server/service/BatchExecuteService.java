@@ -17,10 +17,6 @@ public class BatchExecuteService {
         return executorService.submit(callable);
     }
 
-    public ExecutorService getExecutorService() {
-        return executorService;
-    }
-
     public void setExecutorService(ExecutorService executorService) {
         this.executorService = executorService;
     }

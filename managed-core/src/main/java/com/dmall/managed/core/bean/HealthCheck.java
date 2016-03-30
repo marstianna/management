@@ -1,18 +1,29 @@
 package com.dmall.managed.core.bean;
 
+import com.alibaba.fastjson.JSON;
+import com.dmall.managed.core.server.service.AutoFixCacheService;
+import com.dmall.managed.core.server.service.WarningStrategy;
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Created by zoupeng on 16/3/29.
  */
 public class HealthCheck {
     private WarningStrategy warningStrategy;
 
+    private AutoFixCacheService autoFixCacheService;
+
     private String defaultValue;
+
+    private String targetNodeQualifier;
 
     private String targetOperationQualifier;
 
     private String currentValue;
 
     private String cron;
+
+    private Exception invokeException;
 
     private boolean isWarning = false;
 
@@ -62,5 +73,56 @@ public class HealthCheck {
 
     public void setTargetOperationQualifier(String targetOperationQualifier) {
         this.targetOperationQualifier = targetOperationQualifier;
+    }
+
+    public Exception getInvokeException() {
+        return invokeException;
+    }
+
+    public void setInvokeException(Exception invokeException) {
+        this.invokeException = invokeException;
+    }
+
+    public AutoFixCacheService getAutoFixCacheService() {
+        return autoFixCacheService;
+    }
+
+    public void setAutoFixCacheService(AutoFixCacheService autoFixCacheService) {
+        this.autoFixCacheService = autoFixCacheService;
+    }
+
+    public String getTargetNodeQualifier() {
+        return targetNodeQualifier;
+    }
+
+    public void setTargetNodeQualifier(String targetNodeQualifier) {
+        this.targetNodeQualifier = targetNodeQualifier;
+    }
+
+    public void selfCheck(Object result){
+        String current = (result instanceof String) ? String.valueOf(result) : JSON.toJSONString(result);
+        this.setCurrentValue(current);
+        if(StringUtils.isBlank(this.currentValue) || !this.defaultValue.equals(this.currentValue)){
+            this.tryAutoFix();
+            boolean fixSuccess = doubleCheck();
+            if(!fixSuccess) {
+                this.isWarning();
+            }
+        }
+    }
+
+
+    public void tryAutoFix(){
+        this.autoFixCacheService.autoFix(this);
+    }
+
+    private boolean doubleCheck(){
+        return !StringUtils.isBlank(this.currentValue) && this.defaultValue.equals(this.currentValue);
+    }
+
+    public void warning(){
+        if(this.isWarning) {
+            this.warningStrategy.warning(this);
+        }
     }
 }
