@@ -35,7 +35,7 @@ public @interface ManagementParam {
      * 参数顺序位置表示
      * @return
      */
-    int order();
+    int order() default 0;
 
     /**
      * 参数类型,
@@ -43,5 +43,5 @@ public @interface ManagementParam {
      * PARAM_INPUT:方法入参
      * @return
      */
-    ParamType paramType();
+    ParamType paramType() default ParamType.PARAM_SHOW;
 }

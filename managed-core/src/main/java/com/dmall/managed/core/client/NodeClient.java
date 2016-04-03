@@ -19,7 +19,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -101,17 +101,22 @@ public class NodeClient implements ApplicationListener<ContextRefreshedEvent> {
     }
 
     private List<Service> getAllManagedBeans() {
-        List<Service> ret = new ArrayList<Service>();
+        Map<String,Service> services = new HashMap<>();
         ApplicationContext context = this.ac;
-        Map<String, Object> beanMap = context.getBeansWithAnnotation(ManagementService.class);
-        if (MapUtils.isNotEmpty(beanMap)) {
-            for(Object obj : beanMap.values()){
-                Service service = NodeServiceBuilder.buidNodeService(obj.getClass());
-                ret.add(service);
+        do {
+            Map<String, Object> beanMap = context.getBeansWithAnnotation(ManagementService.class);
+            if (MapUtils.isNotEmpty(beanMap)) {
+                for(Object obj : beanMap.values()){
+                    Service service = NodeServiceBuilder.buidNodeService(obj.getClass());
+                    if(!services.containsKey(service.getName())) {
+                        services.put(service.getName(), service);
+                    }
+                }
             }
-        }
+        } while ((context = context.getParent()) != null);
 
-        return ret;
+
+        return Lists.newArrayList(services.values());
     }
 
 

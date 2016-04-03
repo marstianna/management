@@ -14,14 +14,14 @@ import java.util.Map;
  *
  * Created by zoupeng on 16/3/3.
  */
-public class ReflectInvoker implements Invoker {
+public abstract class ReflectInvoker implements Invoker {
 
     public Object invoke(Operation operation, Map<String,Object> params) {
         Object result = null;
         try {
             Service service = operation.getService();
             Class c = Class.forName(service.getName());
-            Object instance = c.newInstance();
+            Object instance = getServiceInstance(service.getName());
             Method method;
             if(operation.getParams() != null && operation.getParams().size()>0){
                 Object[] tmpParams = new Object[params.size()];
@@ -43,4 +43,5 @@ public class ReflectInvoker implements Invoker {
         return result;
     }
 
+    public abstract Object getServiceInstance(String serviceName);
 }
