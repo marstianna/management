@@ -16,6 +16,8 @@ public class Parameter {
 
     private Integer order;
 
+    private String paramType;
+
     public String getDesc() {
         return desc;
     }
@@ -62,5 +64,13 @@ public class Parameter {
 
     public void setOrder(Integer order) {
         this.order = order;
+    }
+
+    public String getParamType() {
+        return paramType;
+    }
+
+    public void setParamType(String paramType) {
+        this.paramType = paramType;
     }
 }

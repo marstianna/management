@@ -1,7 +1,5 @@
 package com.dmall.managed.core.bean;
 
-import com.dmall.managed.core.constant.OperationType;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +15,7 @@ public class Operation {
 
     private String displayName;
 
-    private OperationType type;
+    private String type;
 
     private List<Parameter> params = new ArrayList<Parameter>();
 
@@ -65,11 +63,11 @@ public class Operation {
         this.name = name;
     }
 
-    public OperationType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(OperationType type) {
+    public void setType(String type) {
         this.type = type;
     }
 }

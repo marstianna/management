@@ -79,7 +79,7 @@ public class NodeServiceBuilder {
             }
             operation.setDisplayName(annotationOfOperation.displayName());
             operation.setQualifier(annotationOfOperation.qualifier());
-            operation.setType(annotationOfOperation.type());
+            operation.setType(annotationOfOperation.type().getName());
             operation.setName(method.getName());
             operation.setParams(getParamsByOperation(method));
             operations.add(operation);
@@ -92,6 +92,9 @@ public class NodeServiceBuilder {
         List<Parameter> params = new ArrayList<>();
 
         ManagementParams managementParams = m.getAnnotation(ManagementParams.class);
+        if(managementParams == null){
+            return params;
+        }
         ManagementParam[] tmpParams = managementParams.params();
         for(ManagementParam param : tmpParams){
             Parameter parameter = new Parameter();
@@ -99,6 +102,7 @@ public class NodeServiceBuilder {
             parameter.setName(param.name());
             parameter.setType(param.type());
             parameter.setOrder(param.order());
+            parameter.setParamType(param.paramType().getName());
             params.add(parameter);
         }
 

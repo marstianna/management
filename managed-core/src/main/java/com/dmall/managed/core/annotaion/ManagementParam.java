@@ -1,5 +1,7 @@
 package com.dmall.managed.core.annotaion;
 
+import com.dmall.managed.core.constant.ParamType;
+
 import java.lang.annotation.*;
 
 /**
@@ -34,4 +36,12 @@ public @interface ManagementParam {
      * @return
      */
     int order();
+
+    /**
+     * 参数类型,
+     * PARAM_SHOW:展示类型
+     * PARAM_INPUT:方法入参
+     * @return
+     */
+    ParamType paramType();
 }

@@ -113,7 +113,9 @@ public class HealthCheck {
 
 
     public void tryAutoFix(){
-        this.autoFixCacheService.autoFix(this);
+        if(autoFixCacheService != null) {
+            this.autoFixCacheService.autoFix(this);
+        }
     }
 
     private boolean doubleCheck(){

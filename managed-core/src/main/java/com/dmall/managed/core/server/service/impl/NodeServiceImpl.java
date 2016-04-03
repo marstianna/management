@@ -137,16 +137,26 @@ public class NodeServiceImpl implements NodeService {
     public Pair<String,? extends Map<String,String>> healthCheck(HealthCheck healthCheck) {
         Pair<String,? extends Map<String,String>> pair = Pair.of(healthCheck.getDefaultValue(),new HashMap<String,String>());
         if(StringUtils.isBlank(healthCheck.getTargetNodeQualifier())){
-            Map<String,Object> results = batchExec(healthCheck.getTargetOperationQualifier(),null);
-            for(String nodeQualifier : results.keySet()){
-                Object result = results.get(nodeQualifier);
-                healthCheck.selfCheck(result);
-                pair.getValue().put(nodeQualifier,healthCheck.getCurrentValue());
+            try {
+                Map<String, Object> results = batchExec(healthCheck.getTargetOperationQualifier(), null);
+                for (String nodeQualifier : results.keySet()) {
+                    Object result = results.get(nodeQualifier);
+                    healthCheck.selfCheck(result);
+                    pair.getValue().put(nodeQualifier, healthCheck.getCurrentValue());
+                }
+            }catch (Exception e){
+                LOGGER.error("healthCheck失败,调用方法:"+healthCheck.getTargetOperationQualifier(),e);
+                healthCheck.setInvokeException(e);
             }
         }else{
-            Object result = exec(healthCheck.getTargetNodeQualifier(),healthCheck.getTargetOperationQualifier(),null);
-            healthCheck.selfCheck(result);
-            pair.getValue().put(healthCheck.getTargetNodeQualifier(),healthCheck.getCurrentValue());
+            try {
+                Object result = exec(healthCheck.getTargetNodeQualifier(), healthCheck.getTargetOperationQualifier(), null);
+                healthCheck.selfCheck(result);
+                pair.getValue().put(healthCheck.getTargetNodeQualifier(), healthCheck.getCurrentValue());
+            }catch (Exception e){
+                LOGGER.error("healthCheck失败,调用节点:"+healthCheck.getTargetNodeQualifier()+",调用方法:"+healthCheck.getTargetOperationQualifier(),e);
+                healthCheck.setInvokeException(e);
+            }
         }
         return pair;
     }

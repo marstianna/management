@@ -8,7 +8,6 @@ import com.google.common.collect.ImmutableMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -49,7 +48,7 @@ public abstract class AbstractManagedServerController {
 
     public Object batchExec(String operationQualifier,Map<String,Object> params){
         LOGGER.info("即将执行节点所有节点的操作请求("+operationQualifier+"),参数为"+params);
-        List<Object> results = getNodeService().batchExec(operationQualifier,params);
+        Map<String,Object> results = getNodeService().batchExec(operationQualifier,params);
         return results;
     }
 
