@@ -19,6 +19,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,8 +54,8 @@ public class NodeClient implements ApplicationListener<ContextRefreshedEvent> {
 
         LOGGER.info("启动时自动注册方法调用开始,中央节点注册地址为"+centralNode+registerPath);
         Node node = collectNodeInfo();
-        NameValuePair pair = new NameValuePair("nodeInfo", JSON.toJSONString(node));
         try {
+            NameValuePair pair = new NameValuePair("nodeInfo", URLEncoder.encode(JSON.toJSONString(node),"UTF-8"));
             String registerResult = HttpSender.connect(centralNode, registerPath, Lists.newArrayList(pair));
             JSONObject result = JSON.parseObject(registerResult);
             Boolean success = result.getBoolean("success");
