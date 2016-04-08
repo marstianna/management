@@ -1,4 +1,4 @@
-package com.dmall.managed.core.server.service;
+package com.dmall.managed.core.server.service.impl;
 
 import com.google.common.base.Preconditions;
 

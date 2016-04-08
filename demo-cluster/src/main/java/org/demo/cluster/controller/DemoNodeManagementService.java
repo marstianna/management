@@ -1,7 +1,7 @@
 package org.demo.cluster.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.dmall.managed.core.client.AbstractManagedClientController;
+import com.dmall.managed.core.client.ManagementClientServiceImpl;
 import com.dmall.managed.core.client.NodeClient;
 import com.dmall.managed.core.Invoker;
 import org.demo.cluster.management.DemoManagementService;
@@ -19,7 +19,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/node/management/")
-public class DemoNodeManagementController extends AbstractManagedClientController{
+public class DemoNodeManagementService extends ManagementClientServiceImpl {
     @Autowired
     DemoManagementService demoManagementService;
     @Resource(name = "springInvoker")
@@ -34,7 +34,6 @@ public class DemoNodeManagementController extends AbstractManagedClientControlle
 
     @RequestMapping("register")
     @ResponseBody
-    @Override
     public String getNodeInfo() {
         return JSONObject.toJSONString(demoManagementService.getNode());
     }

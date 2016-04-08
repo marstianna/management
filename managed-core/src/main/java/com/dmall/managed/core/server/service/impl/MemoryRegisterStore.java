@@ -2,7 +2,7 @@ package com.dmall.managed.core.server.service.impl;
 
 import com.dmall.managed.core.bean.Node;
 import com.dmall.managed.core.bean.Operation;
-import com.dmall.managed.core.server.service.RegisterStore;
+import com.dmall.managed.core.server.service.iface.RegisterStore;
 import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
@@ -26,6 +26,11 @@ public class MemoryRegisterStore implements RegisterStore {
     @Override
     public Node delete(String nodeQualifier) {
         return registerNodes.remove(nodeQualifier);
+    }
+
+    @Override
+    public void clear(){
+        registerNodes.clear();
     }
 
     @Override
@@ -58,7 +63,7 @@ public class MemoryRegisterStore implements RegisterStore {
 
     @Override
     public List<Operation> getOperationsByNode(String nodeQualifier) {
-        return getNode(nodeQualifier).getOperations();
+        return getNode(nodeQualifier).allOperationsInNode();
     }
 
     @Override

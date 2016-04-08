@@ -1,4 +1,4 @@
-package com.dmall.managed.core.server.invoker;
+package com.dmall.managed.http;
 
 import com.alibaba.fastjson.JSON;
 import com.dmall.managed.core.Invoker;

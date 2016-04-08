@@ -13,10 +13,29 @@
         <module>demo-master</module>
         <module>demo-cluster</module>
         <module>managed-core</module>
+        <module>managed-dubbo</module>
+        <module>managed-http</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.apache.zookeeper</groupId>
+                <artifactId>zookeeper</artifactId>
+                <version>3.4.5</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-framework</artifactId>
+                <version>2.9.1</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.google.guava</groupId>
+                        <artifactId>guava</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
             <!--log related-->
             <dependency>
                 <groupId>ch.qos.logback</groupId>
@@ -42,6 +61,11 @@
                 <groupId>org.slf4j</groupId>
                 <artifactId>log4j-over-slf4j</artifactId>
                 <version>1.7.5</version>
+            </dependency>
+            <dependency>
+                <groupId>apache-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>1.2</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -190,6 +214,11 @@
                 <artifactId>commons-collections</artifactId>
                 <version>3.2.1</version>
             </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>dubbo</artifactId>
+                <version>2.5.3</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -216,8 +245,6 @@
                         <skip>false</skip>
                     </configuration>
                 </plugin>
-
-
             </plugins>
         </pluginManagement>
     </build>

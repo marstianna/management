@@ -1,4 +1,4 @@
-package com.dmall.managed.core.server.service;
+package com.dmall.managed.core.server.service.iface;
 
 import com.dmall.managed.core.bean.HealthCheck;
 

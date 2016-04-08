@@ -2,13 +2,14 @@ package com.dmall.managed.core.bean;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by zoupeng on 16/2/26.
  */
-public class Node {
+public class Node implements Serializable{
     private String ip;
     private Integer port;
     private String desc;
@@ -21,7 +22,7 @@ public class Node {
     private List<Service> services = new ArrayList<Service>();
 
     @JSONField(serialize = false,deserialize = false)
-    public List<Operation> getOperations(){
+    public List<Operation> allOperationsInNode(){
         List<Operation> operations = new ArrayList<>();
         for(Service service : services){
             operations.addAll(service.getOperations());

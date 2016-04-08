@@ -1,4 +1,4 @@
-package com.dmall.managed.core.server.service;
+package com.dmall.managed.core.server.service.iface;
 
 import com.dmall.managed.core.bean.HealthCheck;
 import com.dmall.managed.core.bean.Node;
@@ -94,4 +94,16 @@ public interface NodeService {
      * @return  key=expectValue,Map(key=nodeQualifier,value=currentValue);
      */
     Pair<String,? extends Map<String,String>> healthCheck(HealthCheck healthCheck);
+
+    /**
+     * 刷新当前缓存的节点信息
+     */
+    void refresh();
+
+    /**
+     * 获取请求路径
+     * @param str
+     * @return
+     */
+    String getUrl(String str);
 }

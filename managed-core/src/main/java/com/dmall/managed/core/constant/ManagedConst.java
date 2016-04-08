@@ -6,5 +6,7 @@ package com.dmall.managed.core.constant;
 public class ManagedConst {
     public static final String MASTER_HOST_KEY = "master_key";
     public static final String REGISTER_PATH = "register_path";
+    public static final String KEY_PROVIDER = "providers";
+    public static final String KEY_CONSUMER = "consumers";
 
 }

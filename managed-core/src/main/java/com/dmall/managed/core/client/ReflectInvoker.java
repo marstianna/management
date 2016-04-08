@@ -5,6 +5,8 @@ import com.dmall.managed.core.Invoker;
 import com.dmall.managed.core.bean.Operation;
 import com.dmall.managed.core.bean.Parameter;
 import com.dmall.managed.core.bean.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -15,6 +17,8 @@ import java.util.Map;
  * Created by zoupeng on 16/3/3.
  */
 public abstract class ReflectInvoker implements Invoker {
+    protected static final Logger LOGGER = LoggerFactory.getLogger(ReflectInvoker.class);
+
 
     public Object invoke(Operation operation, Map<String,Object> params) {
         Object result = null;
@@ -32,13 +36,13 @@ public abstract class ReflectInvoker implements Invoker {
                     paramTypes[parameter.getOrder()] = Class.forName(parameter.getType());
                 }
                 method = c.getMethod(operation.getName(), paramTypes);
-                result = method.invoke(instance,params);
+                result = method.invoke(instance,tmpParams);
             }else{
                 method = c.getMethod(operation.getName());
                 result = method.invoke(instance);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("客户端调用出现异常,方法为:"+operation+"参数为:"+params,e);
         }
         return result;
     }

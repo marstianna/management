@@ -1,23 +1,17 @@
 package com.dmall.managed.core.server.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.dmall.managed.core.Invoker;
 import com.dmall.managed.core.bean.HealthCheck;
 import com.dmall.managed.core.bean.Node;
 import com.dmall.managed.core.bean.Operation;
-import com.dmall.managed.core.helper.HttpSender;
-import com.dmall.managed.core.server.service.BatchExecuteService;
-import com.dmall.managed.core.server.service.NodeService;
-import com.dmall.managed.core.server.service.RegisterStore;
+import com.dmall.managed.core.server.service.iface.NodeService;
+import com.dmall.managed.core.server.service.iface.RegisterStore;
 import com.google.common.base.Preconditions;
-import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,20 +21,12 @@ import java.util.concurrent.Future;
 /**
  * Created by zoupeng on 16/3/10.
  */
-public class NodeServiceImpl implements NodeService {
-    private RegisterStore registerStore;
-    private Invoker invoker;
-    private BatchExecuteService batchExecuteService;
+public abstract class AbstractNodeServiceImpl implements NodeService {
+    protected RegisterStore registerStore;
+    protected Invoker invoker;
+    protected BatchExecuteService batchExecuteService;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(NodeServiceImpl.class);
-
-    @Override
-    public void register(String ip, Integer port, String path) {
-        String nodeInfo = HttpSender.connect(ip,port,path, new ArrayList<NameValuePair>());
-        JSONObject json = JSON.parseObject(nodeInfo);
-        Node node = json.getObject("nodeInfo",Node.class);
-        register(node);
-    }
+    protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractNodeServiceImpl.class);
 
     @Override
     public void register(Node node) {
@@ -62,7 +48,7 @@ public class NodeServiceImpl implements NodeService {
             }
         }
 
-        registerStore.delete(delete.getNodeQualifier());
+        deregister(delete.getNodeQualifier());
     }
 
     @Override

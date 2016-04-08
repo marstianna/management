@@ -38,6 +38,7 @@ public class NodeClient implements ApplicationListener<ContextRefreshedEvent> {
 
     private Node node;
 
+    @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if(ac == null){
             ac = event.getApplicationContext();
@@ -88,8 +89,12 @@ public class NodeClient implements ApplicationListener<ContextRefreshedEvent> {
     }
 
     private void fillRegisterInfo(String centralNode , Node node){
-        this.setCentralNode(centralNode);
-        this.node = node;
+        if(!StringUtils.isBlank(centralNode)) {
+            this.setCentralNode(centralNode);
+        }
+        if(node !=null) {
+            this.node = node;
+        }
     }
 
     private Node collectNodeInfo() {
@@ -144,6 +149,10 @@ public class NodeClient implements ApplicationListener<ContextRefreshedEvent> {
     }
 
     public Node getNode() {
+        if(node == null){
+            node = collectNodeInfo();
+            fillRegisterInfo(null,node);
+        }
         return node;
     }
 

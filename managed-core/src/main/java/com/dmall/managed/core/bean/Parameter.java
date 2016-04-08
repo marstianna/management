@@ -1,9 +1,11 @@
 package com.dmall.managed.core.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by zoupeng on 16/2/26.
  */
-public class Parameter {
+public class Parameter implements Serializable {
     private Operation operation;
 
     private String desc;

@@ -4,20 +4,20 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd ">
 
-    <bean id="managementConfig" class="com.dmall.management.core.configuration.ManagementConfig">
+    <bean id="managementConfig" class="com.dmall.managed.core.configuration.ManagementConfig">
         <property name="name" value="" />
         <property name="displayName" value="" />
         <property name="basePath" value="" />
         <property name="desc" value="" />
         <property name="achievePort" ref="testAchievePort" />
         <property name="classNames">
-            <value>com.dmall.management.test.TestManagementService</value>
+            <value>com.dmall.managed.test.TestManagementService</value>
         </property>
      </bean>
 
-    <bean id="testAchievePort" class="com.dmall.management.test.TestAchievePort" />
+    <bean id="testAchievePort" class="com.dmall.managed.test.TestAchievePort" />
 
-    <bean id="nodeParser" class="com.dmall.management.core.parser.NodeParser">
+    <bean id="nodeParser" class="com.dmall.managed.core.parser.NodeParser">
         <property name="managementConfig" ref="managementConfig" />
     </bean>
 </beans>

@@ -1,4 +1,4 @@
-package com.dmall.managed.core.server.service;
+package com.dmall.managed.core.server.service.iface;
 
 import com.dmall.managed.core.bean.Node;
 import com.dmall.managed.core.bean.Operation;
@@ -25,6 +25,8 @@ public interface RegisterStore {
      * @return
      */
     Node delete(String nodeQualifier);
+
+    void clear();
 
     /**
      * 获取节点信息

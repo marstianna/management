@@ -27,7 +27,11 @@ public class SystemInfoProvider {
      *      增加从数据库中获取端口配置的逻辑的备选逻辑
      * @return
      */
-    public static Integer getLocalPort(IAchievePort backUpWay){
+    public static Integer getLocalPort(IAchievePort achievePort){
+        if(achievePort != null){
+            achievePort.getPort();
+        }
+
         Integer ret = null;
         try{
             MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
@@ -38,9 +42,6 @@ public class SystemInfoProvider {
                 ret =  Integer.valueOf(obj.getKeyProperty("port"));
             }
 
-            if((ret == null || ret == 0) && backUpWay != null){
-                ret = backUpWay.getPort();
-            }
         }catch (Exception e){
             LOGGER.error("error occured while inquire server port from local JMX");
         }

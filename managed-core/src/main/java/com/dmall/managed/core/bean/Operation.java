@@ -1,12 +1,13 @@
 package com.dmall.managed.core.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by zoupeng on 16/2/26.
  */
-public class Operation {
+public class Operation implements Serializable {
     private Service service;
 
     private String qualifier;

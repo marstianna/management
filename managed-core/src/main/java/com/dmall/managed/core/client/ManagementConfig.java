@@ -14,6 +14,7 @@ public class ManagementConfig {
     private String desc;
     private String name;
     private String displayName;
+    //如果为dubbo协议,那么basePath就是调用接口
     private String basePath;
     private IAchievePort achievePort;
     //add by pengz
