@@ -1,5 +1,6 @@
 package com.dmall.managed.server;
 
+import com.alibaba.dubbo.config.ApplicationConfig;
 import com.alibaba.dubbo.config.ReferenceConfig;
 import com.dmall.managed.core.client.ManagementClientService;
 
@@ -8,6 +9,19 @@ import com.dmall.managed.core.client.ManagementClientService;
  */
 public class DubboServiceReferenceHelper {
     private final static ReferenceConfig<ManagementClientService> reference = new ReferenceConfig<>();
+
+    //FIXME 这里需要设置interface.class和application
+    private final static ApplicationConfig application = new ApplicationConfig();
+
+    static{
+        application.setName("ofc_man");
+//        gst
+//
+// reference.setInterface("com.dmall.managed.core.client.ManagementClientService");
+        reference.setInterface(ManagementClientService.class);
+        reference.setApplication(application);
+
+    }
 
     public static ManagementClientService get(String url){
         reference.setUrl(url);
