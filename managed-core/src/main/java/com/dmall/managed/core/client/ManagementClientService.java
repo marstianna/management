@@ -23,6 +23,8 @@ public interface ManagementClientService {
      */
     Node registerNodeInfo();
 
+    ///////////////////////////////////////
+    //getter and setter api
     Invoker getInvoker() ;
 
     void setInvoker(Invoker invoker);

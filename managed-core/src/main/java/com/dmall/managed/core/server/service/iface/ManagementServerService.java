@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 管理节点Service
  * Created by zoupeng on 16/4/8.
  */
 public interface ManagementServerService {

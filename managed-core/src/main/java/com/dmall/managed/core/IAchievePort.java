@@ -1,7 +1,11 @@
 package com.dmall.managed.core;
 
 /**
- *  当使用默认的从本地jmx获取port失败时,将执行该获取port的策略
+ * @see com.dmall.managed.core.client.ManagementConfig
+ * 如果Cluster节点配置ManagementConfig.achievePort
+ * 那么将会从配置的这个IAchievePort获取提供服务的端口
+ * 否则,将自动获取该服务启动tomcat时,自动注册的mbean
+ *
  *
  * Created by zoupeng on 16/2/26.
  */

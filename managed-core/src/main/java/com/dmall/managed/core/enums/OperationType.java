@@ -1,4 +1,4 @@
-package com.dmall.managed.core.constant;
+package com.dmall.managed.core.enums;
 
 /**
  * Created by zoupeng on 16/3/10.

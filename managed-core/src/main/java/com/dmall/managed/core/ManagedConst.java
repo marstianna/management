@@ -1,4 +1,4 @@
-package com.dmall.managed.core.constant;
+package com.dmall.managed.core;
 
 /**
  * Created by zoupeng on 16/3/4.

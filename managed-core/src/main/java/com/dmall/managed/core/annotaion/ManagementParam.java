@@ -1,6 +1,6 @@
 package com.dmall.managed.core.annotaion;
 
-import com.dmall.managed.core.constant.ParamType;
+import com.dmall.managed.core.enums.ParamType;
 
 import java.lang.annotation.*;
 
@@ -38,7 +38,7 @@ public @interface ManagementParam {
     int order() default 0;
 
     /**
-     * 参数类型,
+     * 参数类型,该参数暂时没有任何意义
      * PARAM_SHOW:展示类型
      * PARAM_INPUT:方法入参
      * @return

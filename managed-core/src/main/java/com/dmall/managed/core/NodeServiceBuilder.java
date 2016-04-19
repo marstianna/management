@@ -19,6 +19,7 @@ import java.util.List;
  * 所以,在生成Node节点的时候,去掉循环引用,在master接受到
  * 注册请求后,重新完善这个节点
  *
+ * 节点信息builder
  * Created by zoupeng on 16/3/3.
  */
 public class NodeServiceBuilder {

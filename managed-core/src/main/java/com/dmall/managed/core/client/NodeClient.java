@@ -46,6 +46,11 @@ public class NodeClient implements ApplicationListener<ContextRefreshedEvent> {
         }
     }
 
+    /**
+     * 子类需重写这个方法,且获取到管理节点的地址时,
+     * 调用connect(String centralNode, String registerPath),
+     * 进行自动注册
+     */
     public void initOnStartUp(){
         managementConfig = ac.getBean(ManagementConfig.class);
     }
@@ -71,8 +76,11 @@ public class NodeClient implements ApplicationListener<ContextRefreshedEvent> {
 
     }
 
-
-
+    /**
+     * 根据方法标识获取Operation对象
+     * @param operationQualifier
+     * @return
+     */
     public Operation findOperation(String operationQualifier){
         for(Service service : this.node.getServices()){
             for(Operation operation : service.getOperations()){
@@ -88,6 +96,11 @@ public class NodeClient implements ApplicationListener<ContextRefreshedEvent> {
         return null;
     }
 
+    /**
+     * 当节点信息生成成功后,自动保存在NodeClient的缓存里
+     * @param centralNode
+     * @param node
+     */
     private void fillRegisterInfo(String centralNode , Node node){
         if(!StringUtils.isBlank(centralNode)) {
             this.setCentralNode(centralNode);
@@ -97,6 +110,10 @@ public class NodeClient implements ApplicationListener<ContextRefreshedEvent> {
         }
     }
 
+    /**
+     * 收集Node
+     * @return
+     */
     private Node collectNodeInfo() {
         Node node = managementConfig.getNode();
         String qualifier = NodeServiceBuilder.buildNodeQualifier(node);
@@ -108,6 +125,10 @@ public class NodeClient implements ApplicationListener<ContextRefreshedEvent> {
         return node;
     }
 
+    /**
+     * 获取所有被ManagementService注解的类
+     * @return
+     */
     private List<Service> getAllManagedBeans() {
         Map<String,Service> services = new HashMap<>();
         ApplicationContext context = this.ac;

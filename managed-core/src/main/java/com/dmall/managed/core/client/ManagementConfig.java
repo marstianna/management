@@ -16,8 +16,10 @@ public class ManagementConfig {
     private String displayName;
     //如果为dubbo协议,那么basePath就是调用接口
     private String basePath;
+    //获取当前提供服务的端口
     private IAchievePort achievePort;
     //add by pengz
+    //组名,如果组名相同,将会在页面归档为同一类
     private String groupName;
 
     public String getDesc() {

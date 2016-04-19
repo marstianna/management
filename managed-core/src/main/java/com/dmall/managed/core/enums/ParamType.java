@@ -1,4 +1,4 @@
-package com.dmall.managed.core.constant;
+package com.dmall.managed.core.enums;
 
 /**
  * * ManagementParam的参数类型

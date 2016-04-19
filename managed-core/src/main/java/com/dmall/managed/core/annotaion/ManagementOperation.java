@@ -1,6 +1,6 @@
 package com.dmall.managed.core.annotaion;
 
-import com.dmall.managed.core.constant.OperationType;
+import com.dmall.managed.core.enums.OperationType;
 
 import java.lang.annotation.*;
 
@@ -22,7 +22,7 @@ public @interface ManagementOperation {
     String displayName();
 
     /**
-     * 方法的唯一标识
+     * 方法的唯一标识,一个项目里面必须唯一,否则在方法调用的时候会出现无法遇见的问题
      * @return
      */
     String qualifier();

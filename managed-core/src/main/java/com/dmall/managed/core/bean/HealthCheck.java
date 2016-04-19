@@ -9,22 +9,31 @@ import org.apache.commons.lang3.StringUtils;
  * Created by zoupeng on 16/3/29.
  */
 public class HealthCheck {
+    //报警策略,如果出现defaultValue和currentValue不一致,且isWarning = true时,会触发warningStrategy.warning();
     private WarningStrategy warningStrategy;
 
+    //自动修复,如果出现defaultValue和currentValue不一致,会自动调用修复方法
     private AutoFixCacheService autoFixCacheService;
 
+    //期待节点放回的值
     private String defaultValue;
 
+    //目标节点的qualifier
     private String targetNodeQualifier;
 
+    //指定的healthCheck方法
     private String targetOperationQualifier;
 
+    //节点返回的值
     private String currentValue;
 
+    //cron表达式,用于worker调用设置
     private String cron;
 
+    //调用后触发的异常
     private Exception invokeException;
 
+    //是否报警
     private boolean isWarning = false;
 
     public WarningStrategy getWarningStrategy() {

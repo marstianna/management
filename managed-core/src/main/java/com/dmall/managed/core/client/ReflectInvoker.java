@@ -12,7 +12,8 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
- *
+ * 根据注解信息,反射调用对应的方法
+ * Cluster端都需要继承这个类,重写getServiceInstance方法,以便获取Operation所属的类
  *
  * Created by zoupeng on 16/3/3.
  */
@@ -47,5 +48,10 @@ public abstract class ReflectInvoker implements Invoker {
         return result;
     }
 
+    /**
+     * 根据NodeQualifier,获取Node-Service对象
+     * @param serviceName
+     * @return
+     */
     public abstract Object getServiceInstance(String serviceName);
 }
