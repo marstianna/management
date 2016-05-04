@@ -114,8 +114,8 @@ public class HealthCheck {
         if(StringUtils.isBlank(this.currentValue) || !this.defaultValue.equals(this.currentValue)){
             this.tryAutoFix();
             boolean fixSuccess = doubleCheck();
-            if(!fixSuccess) {
-                this.isWarning();
+            if(!fixSuccess && this.isWarning()) {
+                this.warning();
             }
         }
     }
@@ -135,5 +135,18 @@ public class HealthCheck {
         if(this.isWarning) {
             this.warningStrategy.warning(this);
         }
+    }
+
+    public HealthCheck copy(){
+        HealthCheck healthCheck = new HealthCheck();
+        healthCheck.warningStrategy = this.warningStrategy;
+        healthCheck.autoFixCacheService = this.autoFixCacheService;
+        healthCheck.defaultValue = this.defaultValue;
+        healthCheck.currentValue = this.currentValue;
+        healthCheck.targetNodeQualifier = this.targetNodeQualifier;
+        healthCheck.targetOperationQualifier = this.targetOperationQualifier;
+        healthCheck.cron = this.cron;
+        healthCheck.isWarning = this.isWarning;
+        return healthCheck;
     }
 }

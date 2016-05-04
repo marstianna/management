@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by zoupeng on 16/3/10.
@@ -108,7 +109,7 @@ public abstract class AbstractNodeServiceImpl implements NodeService {
         for(String nodeQualifier : maps.keySet()){
             Object value;
             try {
-                value = maps.get(nodeQualifier).get();
+                value = maps.get(nodeQualifier).get(3l, TimeUnit.SECONDS);
             } catch (Exception e){
                 LOGGER.error("调用"+nodeQualifier+"失败,请立即检查!!!");
                 value = e;

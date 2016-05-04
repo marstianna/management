@@ -91,8 +91,6 @@ public class NodeClient implements ApplicationListener<ContextRefreshedEvent> {
                 }
             }
         }
-
-
         return null;
     }
 
