@@ -10,14 +10,21 @@ import javax.management.Query;
 import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.net.SocketException;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 public class SystemInfoProvider {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SystemInfoProvider.class);
+
+    public static final String LOCALHOST = "127.0.0.1";
+
+    public static final String ANYHOST = "0.0.0.0";
+
+    private static final Pattern IP_PATTERN = Pattern.compile("\\d{1,3}(\\.\\d{1,3}){3,5}$");
+
 
     private IAchievePort achievePort;
     /**
@@ -29,7 +36,7 @@ public class SystemInfoProvider {
      */
     public static Integer getLocalPort(IAchievePort achievePort){
         if(achievePort != null){
-            achievePort.getPort();
+            return achievePort.getPort();
         }
 
         Integer ret = null;
@@ -50,22 +57,8 @@ public class SystemInfoProvider {
     }
 
     public static String getLocalIP(){
-        StringBuilder sb = new StringBuilder();
-        try {
-            Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
-            while (en.hasMoreElements()) {
-                NetworkInterface intf = (NetworkInterface) en.nextElement();
-                Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses();
-                while (enumIpAddr.hasMoreElements()) {
-                    InetAddress inetAddress = (InetAddress) enumIpAddr.nextElement();
-                    if (!inetAddress.isLoopbackAddress()  && !inetAddress.isLinkLocalAddress()
-                            && inetAddress.isSiteLocalAddress()) {
-                        sb.append(inetAddress.getHostAddress().toString());
-                    }
-                }
-            }
-        } catch (SocketException e) {  }
-        return sb.toString();
+        InetAddress localAddress = getLocalAddress0();
+        return localAddress == null ? LOCALHOST : localAddress.getHostAddress();
     }
 
     public IAchievePort getAchievePort() {
@@ -74,5 +67,56 @@ public class SystemInfoProvider {
 
     public void setAchievePort(IAchievePort achievePort) {
         this.achievePort = achievePort;
+    }
+
+    private static InetAddress getLocalAddress0() {
+        InetAddress localAddress = null;
+        try {
+            localAddress = InetAddress.getLocalHost();
+            if (isValidAddress(localAddress)) {
+                return localAddress;
+            }
+        } catch (Throwable e) {
+            LOGGER.warn("Failed to retriving ip address, " + e.getMessage(), e);
+        }
+        try {
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            if (interfaces != null) {
+                while (interfaces.hasMoreElements()) {
+                    try {
+                        NetworkInterface network = interfaces.nextElement();
+                        Enumeration<InetAddress> addresses = network.getInetAddresses();
+                        if (addresses != null) {
+                            while (addresses.hasMoreElements()) {
+                                try {
+                                    InetAddress address = addresses.nextElement();
+                                    if (isValidAddress(address)) {
+                                        return address;
+                                    }
+                                } catch (Throwable e) {
+                                    LOGGER.warn("Failed to retriving ip address, " + e.getMessage(), e);
+                                }
+                            }
+                        }
+                    } catch (Throwable e) {
+                        LOGGER.warn("Failed to retriving ip address, " + e.getMessage(), e);
+                    }
+                }
+            }
+        } catch (Throwable e) {
+            LOGGER.warn("Failed to retriving ip address, " + e.getMessage(), e);
+        }
+        LOGGER.error("Could not get local host ip address, will use 127.0.0.1 instead.");
+        return localAddress;
+    }
+
+    private static boolean isValidAddress(InetAddress address) {
+        if (address == null || address.isLoopbackAddress())
+            return false;
+        String name = address.getHostAddress();
+        return (name != null
+                && ! ANYHOST.equals(name)
+                && ! LOCALHOST.equals(name)
+                && IP_PATTERN.matcher(name).matches());
     }
 }

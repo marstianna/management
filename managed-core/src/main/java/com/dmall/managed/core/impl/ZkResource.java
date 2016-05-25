@@ -64,7 +64,7 @@ public class ZkResource implements Resource {
 
     public static void main(String[] args) {
         ZkResource zk = new ZkResource("192.168.8.236:2181,192.168.8.237:2181,192.168.8.238:2181");
-        zk.setBasepath("/dubbo/com.dmall.ofc.dubbo.IOrderFulfillmentDubboService");
-        zk.get("providers");
+        zk.setBasepath("");
+        System.out.println(zk.get("dubbo/com.dmall.managed.core.client.ManagementClientService/configurators"));
     }
 }

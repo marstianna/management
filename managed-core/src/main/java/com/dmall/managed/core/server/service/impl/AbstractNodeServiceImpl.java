@@ -127,6 +127,7 @@ public abstract class AbstractNodeServiceImpl implements NodeService {
             try {
                 Map<String, Object> results = batchExec(healthCheck.getTargetOperationQualifier(), null);
                 for (String nodeQualifier : results.keySet()) {
+                    healthCheck.setTargetNodeQualifier(nodeQualifier);
                     Object result = results.get(nodeQualifier);
                     healthCheck.selfCheck(result);
                     pair.getValue().put(nodeQualifier, healthCheck.getCurrentValue());

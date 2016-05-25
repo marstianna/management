@@ -1,6 +1,5 @@
 package com.dmall.managed.core.client;
 
-import com.alibaba.fastjson.JSON;
 import com.dmall.managed.core.Invoker;
 import com.dmall.managed.core.bean.Operation;
 import com.dmall.managed.core.bean.Parameter;
@@ -32,7 +31,7 @@ public abstract class ReflectInvoker implements Invoker {
                 Object[] tmpParams = new Object[params.size()];
                 Class<?>[] paramTypes = new Class[params.size()];
                 for(Parameter parameter : operation.getParams()){
-                    Object obj = JSON.parseObject(parameter.getValue(),Class.forName(parameter.getType()));
+                    Object obj = params.get(parameter.getName());
                     tmpParams[parameter.getOrder()] = obj;
                     paramTypes[parameter.getOrder()] = Class.forName(parameter.getType());
                 }

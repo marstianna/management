@@ -84,7 +84,7 @@ public interface NodeService {
      * 向所有向管理节点注册过的cluster发送operationQualifier执行任务
      * @param operationQualifier
      * @param params
-     * @return
+     * @return  key=nodeQualifier,value=result
      */
     Map<String,Object> batchExec(String operationQualifier, Map<String, Object> params);
 
