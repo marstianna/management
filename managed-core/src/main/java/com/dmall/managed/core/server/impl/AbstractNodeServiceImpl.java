@@ -1,11 +1,11 @@
-package com.dmall.managed.core.server.service.impl;
+package com.dmall.managed.core.server.impl;
 
 import com.dmall.managed.core.Invoker;
 import com.dmall.managed.core.bean.HealthCheck;
 import com.dmall.managed.core.bean.Node;
 import com.dmall.managed.core.bean.Operation;
-import com.dmall.managed.core.server.service.iface.NodeService;
-import com.dmall.managed.core.server.service.iface.RegisterStore;
+import com.dmall.managed.core.server.NodeService;
+import com.dmall.managed.core.server.RegisterStore;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;

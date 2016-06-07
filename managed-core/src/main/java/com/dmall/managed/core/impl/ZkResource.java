@@ -9,6 +9,8 @@ import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 
 /**
@@ -62,9 +64,9 @@ public class ZkResource implements Resource {
         this.basepath = basepath;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnsupportedEncodingException {
         ZkResource zk = new ZkResource("192.168.8.236:2181,192.168.8.237:2181,192.168.8.238:2181");
         zk.setBasepath("");
-        System.out.println(zk.get("dubbo/com.dmall.managed.core.client.ManagementClientService/configurators"));
+        System.out.println(URLDecoder.decode(zk.get("dubbo/com.dmall.oss.dubbo.OssManagementClientService/providers"),"UTF-8"));
     }
 }

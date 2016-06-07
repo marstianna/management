@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.dmall.managed.core.Resource;
 import com.dmall.managed.core.bean.Node;
 import com.dmall.managed.core.helper.HttpSender;
-import com.dmall.managed.core.server.service.impl.AbstractNodeServiceImpl;
+import com.dmall.managed.core.server.impl.AbstractNodeServiceImpl;
 import org.apache.commons.httpclient.NameValuePair;
 
 import java.util.ArrayList;

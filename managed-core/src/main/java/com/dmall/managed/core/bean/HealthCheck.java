@@ -1,8 +1,8 @@
 package com.dmall.managed.core.bean;
 
 import com.alibaba.fastjson.JSON;
-import com.dmall.managed.core.server.service.iface.AutoFixCacheService;
-import com.dmall.managed.core.server.service.iface.WarningStrategy;
+import com.dmall.managed.core.server.AutoFixCacheService;
+import com.dmall.managed.core.server.WarningStrategy;
 import org.apache.commons.lang3.StringUtils;
 
 /**

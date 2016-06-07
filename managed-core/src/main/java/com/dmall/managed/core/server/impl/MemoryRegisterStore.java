@@ -1,8 +1,8 @@
-package com.dmall.managed.core.server.service.impl;
+package com.dmall.managed.core.server.impl;
 
 import com.dmall.managed.core.bean.Node;
 import com.dmall.managed.core.bean.Operation;
-import com.dmall.managed.core.server.service.iface.RegisterStore;
+import com.dmall.managed.core.server.RegisterStore;
 import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
