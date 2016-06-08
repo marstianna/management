@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        ">
+    <!--dubbo config start-->
+    <!--<dubbo:reference interface="com.dmall.managed.core.client.ManagementClientService" check="false" timeout="10000"/>-->
+    <!--dubbo config end-->
+
+    <!--dubbo invoker-->
+    <bean id="dubboInvoker" class="com.dmall.managed.server.DubboInvoker" />
+
+    <!--resource getter-->
+    <bean id="zookeeperClient" class="com.dmall.managed.commons.ZookeeperClient">
+        <constructor-arg name="_zkAddress" value="${zookeeper.address}"/>
+        <property name="basepath" value="/dubbo/com.dmall.oss.dubbo.OssManagementClientService" />
+    </bean>
+
+    <!--node service-->
+    <bean id="nodeService" class="com.dmall.managed.server.DubboNodeServiceImpl">
+        <property name="invoker" ref="dubboInvoker" />
+        <property name="registerStore" ref="registerStore" />
+        <property name="batchExecuteService" ref="batchExecuteService" />
+        <property name="zookeeperClient" ref="zookeeperClient" />
+    </bean>
+
+    <!--批量任务服务-->
+    <bean id="batchExecuteService" class="com.dmall.managed.core.server.impl.BatchExecuteService">
+        <property name="executorService" ref="threadPoolService" />
+    </bean>
+
+    <!--批量任务处理线程池-->
+    <bean id="threadPoolService" class="java.util.concurrent.Executors" factory-method="newFixedThreadPool">
+        <constructor-arg value="8" />
+    </bean>
+
+    <!--节点信息保存服务-->
+    <!--ofc使用的是内存存储-->
+    <bean id="registerStore" class="com.dmall.managed.core.server.impl.MemoryRegisterStore" />
+
+    <!--management server service-->
+    <bean id="managementServerService" class="com.dmall.managed.core.server.impl.ManagementServerServiceImpl">
+        <property name="nodeService" ref="nodeService" />
+    </bean>
+
+
+    <!--job配置信息-->
+
+    <!--job管理服务,如果需要界面管理服务,如果需要界面管理,那么可以注册这个类-->
+    <bean id="scheduledService" class="com.dmall.managed.core.schedule.impl.ScheduledServiceImpl">
+        <property name="quartzScheduler" ref="quartzScheduler" />
+    </bean>
+
+    <!--job关键服务,启动程序时,自动扫描所有实现ScheduledAware接口的子类-->
+    <bean id="scheduledJobRegistrar" class="com.dmall.managed.core.schedule.QuartzScheduledJobRegister">
+        <property name="scheduler" ref="quartzScheduler" />
+    </bean>
+
+    <!--scheduler基础-->
+    <bean id="quartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" autowire="no">
+        <!-- adjust thread pool properties after before go-live -->
+        <property name="quartzProperties">
+            <props>
+                <prop key="org.quartz.scheduler.skipUpdateCheck">true</prop>
+                <prop key="org.quartz.threadPool.class">org.quartz.simpl.SimpleThreadPool</prop>
+                <prop key="org.quartz.threadPool.threadCount">8</prop>
+                <prop key="org.quartz.jobStore.class">org.quartz.simpl.RAMJobStore</prop>
+            </props>
+        </property>
+    </bean>
+</beans>

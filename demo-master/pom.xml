@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.dmall</groupId>
-            <artifactId>managed-core</artifactId>
+            <artifactId>managed-dubbo</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
