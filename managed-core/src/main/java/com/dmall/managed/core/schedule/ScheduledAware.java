@@ -5,5 +5,5 @@ package com.dmall.managed.core.schedule;
  * 的方法会被收集到内存里
  * Created by zoupeng on 6/7/16.
  */
-public class ScheduledAware {
+public interface ScheduledAware {
 }

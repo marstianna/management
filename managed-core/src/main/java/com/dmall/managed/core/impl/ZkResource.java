@@ -16,6 +16,7 @@ import java.util.List;
 /**
  * Created by zoupeng on 16/4/7.
  */
+@Deprecated
 public class ZkResource implements Resource {
     private String zkAddress;
     private String basepath;

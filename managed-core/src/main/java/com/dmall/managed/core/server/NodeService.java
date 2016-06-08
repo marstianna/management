@@ -100,10 +100,4 @@ public interface NodeService {
      */
     void refresh();
 
-    /**
-     * 获取请求路径
-     * @param str
-     * @return
-     */
-    String getUrl(String str);
 }

@@ -12,15 +12,21 @@ import java.util.Map;
  */
 public class DubboInvoker implements Invoker{
     private ManagementClientService managementClientService;
+    private DubboServiceReferenceHelper dubboServiceReferenceHelper;
 
     @Override
     public Object invoke(Operation operation, Map<String, Object> params) {
         Node node = operation.getService().getNode();
-        managementClientService = DubboServiceReferenceHelper.get(node.getIp(),node.getPort(),node.getBasePath());
+        managementClientService = dubboServiceReferenceHelper.get(node.getIp(),node.getPort(),node.getBasePath());
         return managementClientService.exec(operation.getQualifier(),params);
     }
 
     public void setManagementClientService(ManagementClientService managementClientService) {
         this.managementClientService = managementClientService;
+    }
+
+
+    public void setDubboServiceReferenceHelper(DubboServiceReferenceHelper dubboServiceReferenceHelper) {
+        this.dubboServiceReferenceHelper = dubboServiceReferenceHelper;
     }
 }
