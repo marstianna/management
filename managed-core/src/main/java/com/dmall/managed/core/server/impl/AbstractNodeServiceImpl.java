@@ -12,11 +12,11 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -85,12 +85,13 @@ public abstract class AbstractNodeServiceImpl implements NodeService {
 
     @Override
     public Map<String,Object> batchExec(final String operationQualifier, final Map<String, Object> params) {
-        Map<String,Future<Object>> maps= new HashMap<>();
+        List<String> qualifiers= new ArrayList<>();
 
         List<Operation> operations = registerStore.getOperations(operationQualifier);
         for(final Operation operation : operations){
             final String nodeQualifier = operation.getService().getNode().getNodeQualifier();
-            Future<Object> result = batchExecuteService.submit(new Callable<Object>() {
+            String qualifier = qualifierBuilder(nodeQualifier, operationQualifier);
+            batchExecuteService.submit(qualifier,new Callable<Object>() {
                 @Override
                 public Object call() throws Exception {
                     Object received = null;
@@ -102,19 +103,19 @@ public abstract class AbstractNodeServiceImpl implements NodeService {
                     return received;
                 }
             });
-            maps.put(nodeQualifier,result);
+            qualifiers.add(qualifier);
         }
 
         Map<String,Object> results = new HashMap<>();
-        for(String nodeQualifier : maps.keySet()){
+        for(String qualifier : qualifiers){
             Object value;
             try {
-                value = maps.get(nodeQualifier).get(3l, TimeUnit.SECONDS);
+                value = batchExecuteService.poll(qualifier,3l, TimeUnit.SECONDS);
             } catch (Exception e){
-                LOGGER.error("调用"+nodeQualifier+"失败,请立即检查!!!");
+                LOGGER.error("调用"+qualifier+"失败,请立即检查!!!");
                 value = e;
             }
-            results.put(nodeQualifier,value);
+            results.put(qualifier,value);
         }
 
         return results;
@@ -171,5 +172,9 @@ public abstract class AbstractNodeServiceImpl implements NodeService {
 
     public void setBatchExecuteService(BatchExecuteService batchExecuteService) {
         this.batchExecuteService = batchExecuteService;
+    }
+
+    private String qualifierBuilder(String nodeQualifier,String operationQualifier){
+        return nodeQualifier+"-"+operationQualifier+"-"+System.currentTimeMillis();
     }
 }
