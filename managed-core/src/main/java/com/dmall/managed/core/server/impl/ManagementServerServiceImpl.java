@@ -55,8 +55,7 @@ public class ManagementServerServiceImpl implements ManagementServerService {
     @Override
     public Map<String,Object> batchExec(String operationQualifier,Map<String,Object> params){
         LOGGER.info("即将执行节点所有节点的操作请求("+operationQualifier+"),参数为"+params);
-        Map<String,Object> results = getNodeService().batchExec(operationQualifier,params);
-        return results;
+        return getNodeService().batchExec(operationQualifier,params);
     }
 
     @Override

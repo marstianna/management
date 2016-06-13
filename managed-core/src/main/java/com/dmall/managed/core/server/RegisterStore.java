@@ -26,6 +26,9 @@ public interface RegisterStore {
      */
     Node delete(String nodeQualifier);
 
+    /**
+     * 删除当前所有注册的节点信息
+     */
     void clear();
 
     /**

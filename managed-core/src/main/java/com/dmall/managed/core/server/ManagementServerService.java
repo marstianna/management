@@ -67,6 +67,8 @@ public interface ManagementServerService {
      */
     Pair<String, ? extends Map<String, String>> healthCheck(HealthCheck healthCheck);
 
+
+    //------------------getter  and setter------
     NodeService getNodeService();
 
     void setNodeService(NodeService nodeService);

@@ -1,5 +1,6 @@
 package com.dmall.managed.core.schedule.impl;
 
+import com.dmall.managed.core.schedule.QuartzScheduledJobRegister;
 import com.dmall.managed.core.schedule.ScheduledService;
 import com.dmall.managed.core.util.DateTool;
 import com.google.common.base.Function;
@@ -7,7 +8,9 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
+import org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +26,34 @@ public class ScheduledServiceImpl implements ScheduledService {
     private Scheduler quartzScheduler;
 
     public static final String SCHEDULE_TRIGGER_MANUALLY = "manually_invoke";
+
+    @Override
+    public void addJob(Object target, Method method,Object[] args, String group, String name, String cron) throws NoSuchMethodException, ClassNotFoundException, SchedulerException {
+        MethodInvokingJobDetailFactoryBean jobFactory = new MethodInvokingJobDetailFactoryBean();
+
+        jobFactory.setTargetObject(target);
+        jobFactory.setTargetMethod(method.getName());
+        jobFactory.setGroup(group);
+        jobFactory.setName(name);
+        jobFactory.setArguments(args);
+
+        jobFactory.setConcurrent(true);
+
+        jobFactory.afterPropertiesSet();
+
+        JobDetail jobDetail = jobFactory.getObject();
+
+        jobDetail.getJobDataMap().put(QuartzScheduledJobRegister.SCHEDULE_CLUSTER_CONCURRENT, false);
+
+        TriggerBuilder<Trigger> triggerBuilder = TriggerBuilder.newTrigger()
+                .withIdentity(jobDetail.getKey().getName() + "_trigger", jobDetail.getKey().getGroup() + "_triggers")
+                .startNow();
+
+        triggerBuilder.withSchedule(CronScheduleBuilder.cronSchedule(cron));
+
+        quartzScheduler.scheduleJob(jobDetail, triggerBuilder.build());
+    }
+
     @Override
     public List<Map<String,Object>> getJobs() throws SchedulerException {
         List<JobKey> runningJobs = Lists.transform(quartzScheduler.getCurrentlyExecutingJobs(), new Function<JobExecutionContext, JobKey>() {
@@ -53,7 +84,6 @@ public class ScheduledServiceImpl implements ScheduledService {
 
                 Trigger.TriggerState triggerState = quartzScheduler.getTriggerState(trigger.getKey());
                 int status = Trigger.TriggerState.NORMAL == triggerState ? 1 : 0;
-                // 2014-9-10
                 status = runningJobs.contains(jobKey) ? 2 : status;
                 entry.put("status", status);
 

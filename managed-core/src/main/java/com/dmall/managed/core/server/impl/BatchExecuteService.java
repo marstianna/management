@@ -13,11 +13,10 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class BatchExecuteService implements BlockingExecuteService {
     private final Executor executor;
-    private final AbstractExecutorService aes;
     private final Cache<String,Future<Object>> completionMap = CacheBuilder.newBuilder()
             .maximumSize(1000)
             .expireAfterWrite(5, TimeUnit.SECONDS)
-            .build();;
+            .build();
 
     /** Lock held by take, poll, etc */
     private final ReentrantLock takeLock = new ReentrantLock();
@@ -26,7 +25,7 @@ public class BatchExecuteService implements BlockingExecuteService {
     private final Condition notEmpty = takeLock.newCondition();
 
 
-    private class QueueingFuture extends FutureTask<Void> {
+    private class QueueingFuture extends FutureTask<Object> {
         QueueingFuture(String qualifier,RunnableFuture<Object> task) {
             super(task, null);
             this.task = task;
@@ -51,31 +50,22 @@ public class BatchExecuteService implements BlockingExecuteService {
     }
 
     private RunnableFuture<Object> newTaskFor(Callable<Object> task) {
-        return new FutureTask<Object>(task);
+        return new FutureTask<>(task);
     }
 
     private RunnableFuture<Object> newTaskFor(Runnable task, Object result) {
-        return new FutureTask<Object>(task, result);
+        return new FutureTask<>(task, result);
     }
 
     public BatchExecuteService(Executor executor) {
         if (executor == null)
             throw new NullPointerException();
         this.executor = executor;
-        this.aes = (executor instanceof AbstractExecutorService) ?
-                (AbstractExecutorService) executor : null;
     }
 
     public Future<Object> submit(String qualifier,Callable<Object> task) {
         if (task == null) throw new NullPointerException();
         RunnableFuture<Object> f = newTaskFor(task);
-        executor.execute(new QueueingFuture(qualifier,f));
-        return f;
-    }
-
-    public Future<Object> submit(String qualifier,Runnable task, Object result) {
-        if (task == null) throw new NullPointerException();
-        RunnableFuture<Object> f = newTaskFor(task, result);
         executor.execute(new QueueingFuture(qualifier,f));
         return f;
     }
@@ -95,7 +85,7 @@ public class BatchExecuteService implements BlockingExecuteService {
         }finally {
             takeLock.unlock();
         }
-        return result.get();
+        return result == null ? null : result.get();
     }
 
     public Object poll(String qualifier) throws ExecutionException, InterruptedException {
@@ -112,7 +102,7 @@ public class BatchExecuteService implements BlockingExecuteService {
         }finally {
             takeLock.unlock();
         }
-        return result.get();
+        return result == null ? null : result.get();
     }
 
     public Object poll(String qualifier,long timeout, TimeUnit unit) throws InterruptedException, ExecutionException {
@@ -134,7 +124,7 @@ public class BatchExecuteService implements BlockingExecuteService {
         }finally {
             takeLock.unlock();
         }
-        return result.get();
+        return result == null ? null : result.get();
     }
 
 }

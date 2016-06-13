@@ -43,13 +43,14 @@ public abstract class AbstractNodeServiceImpl implements NodeService {
 
         Node delete = null;
         for(Node node : nodes){
-            if(node.getNodeQualifier().indexOf(uniqueHost) != -1){
+            if(node.getNodeQualifier().contains(uniqueHost)){
                 delete = node;
                 break;
             }
         }
-
-        deregister(delete.getNodeQualifier());
+        if(delete != null) {
+            deregister(delete.getNodeQualifier());
+        }
     }
 
     @Override
@@ -110,7 +111,7 @@ public abstract class AbstractNodeServiceImpl implements NodeService {
         for(String qualifier : qualifiers){
             Object value;
             try {
-                value = batchExecuteService.poll(qualifier,3l, TimeUnit.SECONDS);
+                value = batchExecuteService.poll(qualifier,3L, TimeUnit.SECONDS);
             } catch (Exception e){
                 LOGGER.error("调用"+qualifier+"失败,请立即检查!!!");
                 value = e;
