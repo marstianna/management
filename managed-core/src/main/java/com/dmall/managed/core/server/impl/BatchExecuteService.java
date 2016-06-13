@@ -1,5 +1,6 @@
 package com.dmall.managed.core.server.impl;
 
+import com.dmall.managed.core.server.BlockingExecuteService;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
@@ -10,7 +11,7 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * Created by zoupeng on 16/3/29.
  */
-public class BatchExecuteService{
+public class BatchExecuteService implements BlockingExecuteService {
     private final Executor executor;
     private final AbstractExecutorService aes;
     private final Cache<String,Future<Object>> completionMap = CacheBuilder.newBuilder()
@@ -136,33 +137,4 @@ public class BatchExecuteService{
         return result.get();
     }
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
-        ExecutorService executorService = Executors.newFixedThreadPool(8);
-        BatchExecuteService batchExecuteService = new BatchExecuteService(executorService);
-        for(int i = 0 ;i < 10 ;i++){
-            final int finalI = i;
-            batchExecuteService.submit(String.valueOf(i), new Callable<Object>() {
-                @Override
-                public Object call() throws Exception {
-                    double random = Math.random();
-                    try {
-                        if (finalI == 5) {
-                            throw new RuntimeException("xetetsetest");
-                        }
-                    }catch (Exception e){
-                        System.out.println("shibaibaibiabi");
-                    }
-                    System.out.println("inner("+finalI+")--------------->"+random);
-                    return random;
-                }
-            });
-        }
-        Thread.sleep(1000);
-        for(int i = 0; i<10;i++){
-//            Object result = batchExecuteService.poll(String.valueOf(i),1,TimeUnit.SECONDS);
-            Object result = batchExecuteService.poll(String.valueOf(i));
-//            Object result = batchExecuteService.take(String.valueOf(i));
-            System.out.println("outer("+i+")--------------->"+result);
-        }
-    }
 }
