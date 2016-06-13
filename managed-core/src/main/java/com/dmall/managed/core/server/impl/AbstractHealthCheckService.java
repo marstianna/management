@@ -11,6 +11,10 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Method;
 
 /**
+ * 不推荐直接实现HealthCheckService,推荐继承这个抽象类
+ * 这个抽象类封装了scheduledHealthCheck和immediatelyHealthCheck
+ * 一般如果采用包内ScheduledService和NodeService的情况就直接实现这个抽象类就好
+ *
  * Created by zoupeng on 6/13/16.
  */
 public abstract class AbstractHealthCheckService implements HealthCheckService {
