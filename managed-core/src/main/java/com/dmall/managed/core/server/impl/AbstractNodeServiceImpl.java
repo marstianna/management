@@ -129,7 +129,7 @@ public abstract class AbstractNodeServiceImpl implements NodeService {
             try {
                 Map<String, Object> results = batchExec(healthCheck.getTargetOperationQualifier(), null);
                 for (String nodeQualifier : results.keySet()) {
-                    healthCheck.setTargetNodeQualifier(nodeQualifier);
+                    healthCheck.setTargetNodeQualifier(decodeTransferNodeQualifier(nodeQualifier));
                     Object result = results.get(nodeQualifier);
                     healthCheck.selfCheck(result);
                     pair.getValue().put(nodeQualifier, healthCheck.getCurrentValue());
@@ -177,5 +177,14 @@ public abstract class AbstractNodeServiceImpl implements NodeService {
 
     private String qualifierBuilder(String nodeQualifier,String operationQualifier){
         return nodeQualifier+"-"+operationQualifier+"-"+System.currentTimeMillis();
+    }
+
+    private String decodeTransferNodeQualifier(String transferNodeQualifier){
+        String parts[] = transferNodeQualifier.split("-");
+        if(parts.length == 3){
+            return parts[0];
+        }else{
+            throw new RuntimeException("transferNodeQualifier出现异常:"+transferNodeQualifier);
+        }
     }
 }
